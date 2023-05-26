@@ -2,15 +2,13 @@
 
 TO DO LIST
 
-## Getting Started
+Diseño de inicio de seccion.
+![Texto alternativo](assets/img/desing1.png)
+Diseño del TO DO LIST
+![Texto alternativo](assets/img/desing.jpg)
 
-This project is a starting point for a Flutter application.
+## LINK de proyecto
 
-A few resources to get you started if this is your first Flutter project:
+- [LOGIN](https://www.pinterest.com/pin/1110770695575030330/)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [TO DO LIST](https://www.pinterest.com/pin/288582288633092878/)
