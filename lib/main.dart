@@ -1,6 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:to_do_list/src/firebase/firebase.dart';
+import 'package:to_do_list/src/view/layout/auth/auth.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -9,9 +16,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      home: Center(child: Text('Flutter Demo Home Page')),
+    return MultiProvider(
+      providers: [
+        // Proveedor de FirebaseAuth
+        Provider<FirebaseAuth>(
+          create: (_) => FirebaseAuth.instance,
+        ),
+        // Proveedor de FirebaseAuthUser
+        Provider<FirebaseAuthUser>(
+          create: (_) => FirebaseAuthUser.instance(),
+        ),
+      ],
+      child: const MaterialApp(
+        title: 'TO DO',
+        home: SignIn(),
+      ),
     );
   }
 }

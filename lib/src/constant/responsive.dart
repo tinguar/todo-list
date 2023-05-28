@@ -32,9 +32,6 @@ class Responsive extends StatelessWidget {
   static dynamic isResponsiveHeight(BuildContext context, double number) =>
       MediaQuery.of(context).size.height / number;
 
-  static dynamic isResponsiveSize(BuildContext context) =>
-      MediaQuery.of(context).size;
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
