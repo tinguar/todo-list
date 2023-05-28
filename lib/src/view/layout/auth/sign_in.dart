@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_list/src/style/style.dart';
 import 'package:to_do_list/src/view/layout/home/home.dart';
 
 import '../../../constant/constant.dart';
@@ -17,7 +18,7 @@ class SignIn extends StatelessWidget {
     final sizeW = Responsive.isResponsiveWidth(context, 1);
     final sizeH = Responsive.isResponsiveHeight(context, 1);
 
-    final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
+    // final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
 
     return Scaffold(
       body: Responsive(
@@ -53,7 +54,7 @@ class SignIn extends StatelessWidget {
             Container(
               width: sizeW * 1,
               height: sizeH / 2,
-              color: const Color(0xFF2d2f46),
+              color: ColorS.background,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -61,34 +62,34 @@ class SignIn extends StatelessWidget {
                     padding: const EdgeInsets.all(20.0),
                     child: GestureDetector(
                       onTap: () async {
-                        final User? user =
-                            await firebaseAuthUser.google(context);
-                        if (user != null) {
-                          Future.delayed(Duration.zero, () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (_) => Todo(
-                                        user: user,
-                                      )),
-                            );
-                          });
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          Dialogs.alert(
-                            context,
-                            title: 'Error de inicio de sesión',
-                            description:
-                                'El inicio de sesión con Google ha fallado.',
-                          );
-                        }
-                        if (kDebugMode) {
-                          print('google');
-                        }
+                        // final User? user =
+                        //     await firebaseAuthUser.google(context);
+                        // if (user != null) {
+                        //   Future.delayed(Duration.zero, () {
+                        //     Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //           builder: (_) => Todo(
+                        //                 user: user,
+                        //               )),
+                        //     );
+                        //   });
+                        // } else {
+                        //   // ignore: use_build_context_synchronously
+                        //   Dialogs.alert(
+                        //     context,
+                        //     title: 'Error de inicio de sesión',
+                        //     description:
+                        //         'El inicio de sesión con Google ha fallado.',
+                        //   );
+                        // }
+                        // if (kDebugMode) {
+                        //   print('google');
+                        // }
                       },
                       child: Container(
                         height: 40.0,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1c1f30),
+                          color: ColorS.button,
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         child: const Row(
