@@ -66,7 +66,10 @@ class SignIn extends StatelessWidget {
                         if (user != null) {
                           Future.delayed(Duration.zero, () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => const Todo()),
+                              MaterialPageRoute(
+                                  builder: (_) => Todo(
+                                        user: user,
+                                      )),
                             );
                           });
                         } else {
