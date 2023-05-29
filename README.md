@@ -1,6 +1,6 @@
 # to_do_list
 
-TO DO LIST, realizado en flutter y firebase.
+TO DO LIST, realizado en flutter, firebase y google auth.
 
 Diseño de inicio de seccion.
 ![Texto alternativo](assets/img/desing1.png)
