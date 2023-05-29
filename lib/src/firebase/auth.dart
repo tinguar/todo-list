@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../model/model.dart';
 import '../widget/widget.dart';
 
 class FirebaseAuthUser {
@@ -16,6 +18,38 @@ class FirebaseAuthUser {
 
   ProgressDialog? _progressDialog;
 
+  Future<void> saveUserDataToFirestore(
+      User user, String name, String email) async {
+    try {
+      final CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      final Users userData = Users(
+        uid: user.uid,
+        name: name,
+        email: email,
+        lastLogin: DateTime.now(),
+      );
+
+      await usersCollection.doc(user.uid).set(userData.toMap());
+    } catch (e) {
+      print('Error al guardar los datos del usuario en Firestore: $e');
+    }
+  }
+
+  Future<void> updateLastLogin(String uid) async {
+    try {
+      final CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      await usersCollection.doc(uid).update({
+        'lastLogin': DateTime.now(),
+      });
+    } catch (e) {
+      print('Error al actualizar el campo lastLogin en Firestore: $e');
+    }
+  }
+
   Future<User?> google(BuildContext context) async {
     _progressDialog = ProgressDialog(context);
     try {
@@ -27,7 +61,7 @@ class FirebaseAuthUser {
       }
 
       final GoogleSignInAuthentication authentication =
-      await googleUser.authentication;
+          await googleUser.authentication;
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: authentication.idToken,
@@ -35,13 +69,25 @@ class FirebaseAuthUser {
       );
 
       final UserCredential userCredential =
-      await _firebaseAuth.signInWithCredential(credential);
+          await _firebaseAuth.signInWithCredential(credential);
 
       final User? user = userCredential.user;
 
       if (kDebugMode) {
         print("username: ${user?.displayName}");
       }
+
+      // Guardar los datos del usuario en Firestore
+      if (user != null) {
+        String name = user.displayName ?? '';
+        String email = user.email ?? '';
+
+        await saveUserDataToFirestore(user, name, email);
+        await updateLastLogin(
+            user.uid); // Actualizar el campo lastLogin en Firestore
+        print('Datos del usuario guardados en Firestore');
+      }
+
       _dismissProgressDialog();
       return user;
     } catch (e) {
