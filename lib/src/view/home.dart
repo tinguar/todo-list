@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_list/src/firebase/firebase.dart';
 import 'package:to_do_list/src/style/style.dart';
 import 'package:to_do_list/src/view/layout/home/home.dart';
 
@@ -9,20 +11,20 @@ import '../widget/widget.dart';
 import 'layout/home/todo.dart';
 
 class Home extends StatelessWidget {
-  final List<Widget> screens = const [
-    Todo(
-      title: 'pantalla uno',
-    ),
-    Like(),
-    Add(),
-    Alert(),
-    Person()
-  ];
+  final User? user;
 
+  const Home({super.key, required this.user});
   @override
   Widget build(BuildContext context) {
     final appStateManager = Provider.of<NavigatorBar>(context);
 
+    final List<Widget> screens = [
+      Todo(user: user),
+      Like(),
+      Add(),
+      Alert(),
+      Person()
+    ];
     return Scaffold(
       backgroundColor: ColorS.background,
       body: screens[appStateManager.selectedIndex],

@@ -1,9 +1,10 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/src/style/style.dart';
+import 'package:to_do_list/src/view/home.dart';
 import 'package:to_do_list/src/view/layout/home/home.dart';
 
 import '../../../constant/constant.dart';
@@ -18,7 +19,7 @@ class SignIn extends StatelessWidget {
     final sizeW = Responsive.isResponsiveWidth(context, 1);
     final sizeH = Responsive.isResponsiveHeight(context, 1);
 
-    // final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
+    final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
 
     return Scaffold(
       body: Responsive(
@@ -62,38 +63,37 @@ class SignIn extends StatelessWidget {
                     color: ColorS.button,
                     icon: FaIcon(
                       FontAwesomeIcons.google,
-                      color:Colors.white,
+                      color: Colors.white,
                     ),
                     text: 'Inicia sesión con Google',
                     textS: TextS.title,
-                    onTap: (){
+                    onTap: () async {
+                      final User? user = await firebaseAuthUser.google(context);
+                      if (user != null) {
+                        Future.delayed(Duration.zero, () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => Home(
+                                user: user,
+                              ),
+                            ),
+                          );
+                        });
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        Dialogs.alert(
+                          context,
+                          title: 'De inicio de sesión',
+                          description:
+                              'El inicio de sesión con Google ha fallado.',
+                        );
+                      }
+                      if (kDebugMode) {
+                        print('google');
+                      }
                       print('INICIAR SECCION');
-                      // final User? user =
-                      //     await firebaseAuthUser.google(context);
-                      // if (user != null) {
-                      //   Future.delayed(Duration.zero, () {
-                      //     Navigator.of(context).push(
-                      //       MaterialPageRoute(
-                      //           builder: (_) => Todo(
-                      //                 user: user,
-                      //               )),
-                      //     );
-                      //   });
-                      // } else {
-                      //   // ignore: use_build_context_synchronously
-                      //   Dialogs.alert(
-                      //     context,
-                      //     title: 'Error de inicio de sesión',
-                      //     description:
-                      //         'El inicio de sesión con Google ha fallado.',
-                      //   );
-                      // }
-                      // if (kDebugMode) {
-                      //   print('google');
-                      // }
                     },
                   ),
-
                   const SizedBox(
                     height: 15.0,
                   ),

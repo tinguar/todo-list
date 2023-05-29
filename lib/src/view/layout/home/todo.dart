@@ -1,4 +1,4 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,13 +11,13 @@ import '../../../style/style.dart';
 import '../../../widget/widget.dart';
 
 class Todo extends StatelessWidget {
-   final String title;
-  // final User? user;
-   const Todo({super.key, required this.title});
+  final User? user;
+
+  const Todo({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    // final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
+    final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
     final sizeW = Responsive.isResponsiveWidth(context, 1);
     final sizeH = Responsive.isResponsiveHeight(context, 1);
     return Scaffold(
@@ -52,7 +52,7 @@ class Todo extends StatelessWidget {
                               width: 10.0,
                             ),
                             Text(
-                              title,
+                              getFormattedName(user?.displayName ?? "N/A"),
                               // getFormattedName(user?.displayName ?? "N/A"),
                               style: TextS.title,
                             ),
@@ -62,7 +62,7 @@ class Todo extends StatelessWidget {
                             Container(
                               width: 10.0,
                               height: 10.0,
-                              decoration:  BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: ColorS.circle,
                               ),
@@ -78,6 +78,11 @@ class Todo extends StatelessWidget {
                     ),
                     child: GestureDetector(
                       onTap: () {
+                        firebaseAuthUser.signOut();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SignIn()),
+                        );
                         if (kDebugMode) {
                           print('CERRAR SECCION RAPIDO');
                         }
