@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/src/style/style.dart';
+import 'package:to_do_list/src/view/layout/home/home.dart';
 
 import '../provider/provider.dart';
+import '../widget/widget.dart';
 import 'layout/home/todo.dart';
 
 class Home extends StatelessWidget {
@@ -11,18 +13,10 @@ class Home extends StatelessWidget {
     Todo(
       title: 'pantalla uno',
     ),
-    Todo(
-      title: 'pantalla dos',
-    ),
-    Todo(
-      title: 'pantalla tres',
-    ),
-    Todo(
-      title: 'pantalla cuatro',
-    ),
-    Todo(
-      title: 'pantalla cinco',
-    ),
+    Like(),
+    Add(),
+    Alert(),
+    Person()
   ];
 
   @override
@@ -37,80 +31,34 @@ class Home extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () => appStateManager.setTabIndex(0),
-              color: appStateManager.selectedIndex == 0
-                  ? ColorS.select
-                  : ColorS.selectN,
+            IconButtonNavigatorBar(
+              icon: FontAwesomeIcons.house,
+              bar: appStateManager,
+              number: 0,
             ),
-            IconButton(
-              icon: Icon(Icons.favorite),
-              onPressed: () => appStateManager.setTabIndex(1),
-              color: appStateManager.selectedIndex == 1
-                  ? ColorS.select
-                  : ColorS.selectN,
+            IconButtonNavigatorBar(
+              icon: FontAwesomeIcons.heartCircleCheck,
+              bar: appStateManager,
+              number: 1,
             ),
-            IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.circlePlus,
-              ),
-              onPressed: () => appStateManager.setTabIndex(2),
-              color: appStateManager.selectedIndex == 2
-                  ? ColorS.select
-                  : ColorS.selectN,
+            IconButtonNavigatorBar(
+              icon: FontAwesomeIcons.circlePlus,
+              bar: appStateManager,
+              number: 2,
             ),
-            IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () => appStateManager.setTabIndex(3),
-              color: appStateManager.selectedIndex == 3
-                  ? ColorS.select
-                  : ColorS.selectN,
+            IconButtonNavigatorBar(
+              icon: FontAwesomeIcons.solidBell,
+              bar: appStateManager,
+              number: 3,
             ),
-            IconButton(
-              icon: Icon(Icons.person),
-              onPressed: () => appStateManager.setTabIndex(4),
-              color: appStateManager.selectedIndex == 4
-                  ? ColorS.select
-                  : ColorS.selectN,
+            IconButtonNavigatorBar(
+              icon: FontAwesomeIcons.userPen,
+              bar: appStateManager,
+              number: 4,
             ),
           ],
         ),
       ),
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   elevation: 0,
-      //   backgroundColor: ColorS.backgroundB,
-      //   selectedItemColor: ColorS.select,
-      //   unselectedItemColor: ColorS.selectN,
-      //   currentIndex: appStateManager.selectedIndex,
-      //   onTap: (index) => appStateManager.setTabIndex(index),
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: '',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.favorite),
-      //       label: '',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: FaIcon(
-      //         FontAwesomeIcons.circlePlus,
-      //       ),
-      //       label: '',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.shopping_cart),
-      //       label: '',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: '',
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
