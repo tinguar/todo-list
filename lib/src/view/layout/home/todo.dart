@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/src/provider/provider.dart';
 import 'package:to_do_list/src/view/layout/auth/auth.dart';
+import 'package:to_do_list/src/view/layout/home/add.dart';
 
 import '../../../constant/constant.dart';
 import '../../../firebase/firebase.dart';
@@ -18,7 +19,6 @@ class Todo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
     final sizeW = Responsive.isResponsiveWidth(context, 1);
     final sizeH = Responsive.isResponsiveHeight(context, 1);
     final appStateManager = Provider.of<NavigatorBar>(context);
@@ -98,34 +98,29 @@ class Todo extends StatelessWidget {
             ),
 
             if (appStateManager.selectedIndex == 0)
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.red,
-                child: Text('0'),
-              ),
+              SizedBox(
+                  width: sizeW * 1,
+                  height: sizeH * 0.78,
+                  child: Text('Inicio', style: TextS.title)),
             if (appStateManager.selectedIndex == 1)
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.blue,
-                child: Text('1'),
-              ),
+              SizedBox(
+                  width: sizeW * 1,
+                  height: sizeH * 0.78,
+                  child: Text('Notas', style: TextS.title)),
             if (appStateManager.selectedIndex == 2)
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.yellow,
-                child: Text('2'),
-              ),
+              SizedBox(
+                  width: sizeW * 1,
+                  height: sizeH * 0.78,
+                  child: Add(
+                    user: user,
+                  )),
             if (appStateManager.selectedIndex == 3)
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.deepPurple,
-                child: Text('3'),
+              SizedBox(
+
+                width: sizeW ,
+                height: sizeH * 0.78 ,
+                child: Text('dadsdsd'),
               ),
-            // getFormattedName(user?.displayName ?? "N/A"),
 
             // ButtonIconOnpress(
             //   color: ColorS.buttonW,

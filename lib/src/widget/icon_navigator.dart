@@ -24,6 +24,7 @@ class IconButtonNavigatorBar extends StatelessWidget {
         splashColor: ColorS.backgroundB,
         highlightColor: ColorS.backgroundB,
         child: FaIcon(
+          size: 30.0,
           icon,
           color: bar.selectedIndex == number ? ColorS.select : ColorS.selectN,
         ),
