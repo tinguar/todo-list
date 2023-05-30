@@ -18,16 +18,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     final appStateManager = Provider.of<NavigatorBar>(context);
 
-    final List<Widget> screens = [
-      Todo(user: user),
-      Like(),
-      Add(),
-      Alert(),
-      Person()
-    ];
     return Scaffold(
       backgroundColor: ColorS.background,
-      body: screens[appStateManager.selectedIndex],
+      body: Todo(user: user),
       bottomNavigationBar: BottomAppBar(
         color: ColorS.backgroundB,
         child: Row(
@@ -49,14 +42,9 @@ class Home extends StatelessWidget {
               number: 2,
             ),
             IconButtonNavigatorBar(
-              icon: FontAwesomeIcons.solidBell,
-              bar: appStateManager,
-              number: 3,
-            ),
-            IconButtonNavigatorBar(
               icon: FontAwesomeIcons.userPen,
               bar: appStateManager,
-              number: 4,
+              number: 3,
             ),
           ],
         ),
