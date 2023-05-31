@@ -27,12 +27,12 @@ class Home extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButtonNavigatorBar(
-              icon: FontAwesomeIcons.house,
+              icon: FontAwesomeIcons.globe,
               bar: appStateManager,
               number: 0,
             ),
             IconButtonNavigatorBar(
-              icon: FontAwesomeIcons.heartCircleCheck,
+              icon: FontAwesomeIcons.house,
               bar: appStateManager,
               number: 1,
             ),

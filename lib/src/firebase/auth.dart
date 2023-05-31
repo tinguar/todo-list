@@ -18,6 +18,24 @@ class FirebaseAuthUser {
 
   ProgressDialog? _progressDialog;
 
+  Future<void> saveNoteWithUser(Note note) async {
+    try {
+      final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+      final User? currentUser = _firebaseAuth.currentUser;
+
+      if (currentUser != null) {
+        final CollectionReference notesCollection =
+        usersCollection.doc(currentUser.uid).collection('notes');
+
+        await notesCollection.add(note.toMap());
+      }
+    } catch (e) {
+      print('Error al guardar la nota del usuario en Firestore: $e');
+    }
+  }
+
   Future<void> saveUserDataToFirestore(
       User user, String name, String email) async {
     try {
@@ -28,9 +46,9 @@ class FirebaseAuthUser {
         uid: user.uid,
         name: name,
         email: email,
+
         lastLogin: DateTime.now(),
       );
-
       await usersCollection.doc(user.uid).set(userData.toMap());
     } catch (e) {
       print('Error al guardar los datos del usuario en Firestore: $e');
@@ -41,7 +59,6 @@ class FirebaseAuthUser {
     try {
       final CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('users');
-
       await usersCollection.doc(uid).update({
         'lastLogin': DateTime.now(),
       });

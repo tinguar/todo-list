@@ -23,6 +23,7 @@ dependencies:
   firebase_core: ^2.13.0
   google_sign_in: ^5.4.4
   syncfusion_flutter_datepicker: ^21.2.6
+  flutter_date_pickers: ^0.4.2
 
 
 dev_dependencies:
