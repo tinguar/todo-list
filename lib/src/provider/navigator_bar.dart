@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class NavigatorBar extends ChangeNotifier {
-  int _selectedIndex = 0;
+class NavigationProvider with ChangeNotifier {
+  int _currentIndex = 0;
 
-  int get selectedIndex => _selectedIndex;
+  int get currentIndex => _currentIndex;
 
-  void setTabIndex(int index) {
-    _selectedIndex = index;
+  void changePage(int index) {
+    _currentIndex = index;
     notifyListeners();
   }
 }

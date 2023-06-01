@@ -24,6 +24,7 @@ class _AddState extends State<Add> {
   final _formKey = GlobalKey<FormState>();
   bool _isPublic = false;
   bool _isLoading = false;
+  bool _isIncognito = false;
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
 
@@ -31,6 +32,16 @@ class _AddState extends State<Add> {
   Widget build(BuildContext context) {
     final sizeW = Responsive.isResponsiveWidth(context, 1);
     final sizeH = Responsive.isResponsiveHeight(context, 1);
+
+    String buttonTitle = '';
+
+    if (!_isPublic && !_isIncognito) {
+      buttonTitle = 'Nota personal'.toUpperCase();
+    } else if (_isPublic && !_isIncognito) {
+      buttonTitle = 'Nota global'.toUpperCase();
+    } else if (_isPublic && _isIncognito) {
+      buttonTitle = 'Nota global privada'.toUpperCase();
+    }
 
     return Form(
       key: _formKey,
@@ -57,11 +68,15 @@ class _AddState extends State<Add> {
           ),
           Padding(
             padding: const EdgeInsets.only(
-                left: 15, right: 15, top: 5, bottom: 10),
+              left: 15,
+              right: 15,
+              top: 5,
+              bottom: 10,
+            ),
             child: TextFormField(
               style: TextS.title,
               controller: _descriptionController,
-              maxLines: 15,
+              maxLines: 13,
               decoration: FormTextC.loginInputDecoration(
                 hint: 'Descripción',
                 label: 'Descripción',
@@ -69,84 +84,89 @@ class _AddState extends State<Add> {
               ),
             ),
           ),
+
+          const SizedBox(height: 20.0),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: sizeW * 0.6,
-                child: ButtonIconOnpress(
-                  color: ColorS.button,
-                  icon: const FaIcon(
-                    FontAwesomeIcons.noteSticky,
-                    color: Colors.white,
-                  ),
-                  text: 'Crear....'.toUpperCase(),
-                  textS: TextS.title,
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        _isLoading = true;
-                      });
-
-                      Note note = Note(
-                        title: _titleController.text,
-                        description: _descriptionController.text,
-                        isPublic: _isPublic,
-                      );
-                      await FirebaseAuthUser.instance()
-                          .saveNoteWithUser(note);
-
-                      setState(() {
-                        _isLoading = false;
-                        _titleController.clear();
-                        _descriptionController.clear();
-                        _isPublic = false; // Restablecer el valor del checkbox
-                      });
-                    }
+              IgnorePointer(
+                ignoring: _isPublic == true ? false : true,
+                child: Checkout(
+                  value: _isIncognito,
+                  size: sizeW * 0.49,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isIncognito = value ?? false;
+                    });
                   },
+                  style: TextS.titleW,
+                  text: 'incognito',
                 ),
               ),
-              _isLoading
-                  ? SizedBox(
-                width: sizeW * 0.4,
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 30.0),
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                ),
-              )
-                  : SizedBox(
-                width: sizeW * 0.36,
-                child: Container(
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: _isPublic,
-                        activeColor: const Color(0xFF1c1f30),
-                        checkColor: const Color(0xFF1c1f30),
-                        focusColor: const Color(0xFF1c1f30),
-                        hoverColor: const Color(0xFF1c1f30),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isPublic = value ?? false;
-                          });
-                        },
-                      ),
-                      Text(
-                        'global'.toUpperCase(),
-                        style: TextS.titleW,
-                      )
-                    ],
-                  ),
-                ),
+              const SizedBox(width: 10.0),
+              Checkout(
+                value: _isPublic,
+                size: sizeW * 0.4,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _isPublic = value ?? false;
+                  });
+                },
+                style: TextS.titleW,
+                text: 'Global',
               ),
             ],
           ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          _isLoading
+              ? SizedBox(
+                  width: sizeW - 10.0,
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 30.0),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : SizedBox(
+                  width: sizeW,
+                  child: ButtonIconOnpress(
+                    color: ColorS.button,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.noteSticky,
+                      color: Colors.white,
+                    ),
+                    text: buttonTitle,
+                    textS: TextS.title,
+                    onTap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+
+                        Note note = Note(
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            isPublic: _isPublic,
+                            isIncognito: _isIncognito);
+                        await FirebaseAuthUser.instance()
+                            .saveNoteWithUser(note);
+
+                        setState(() {
+                          _isLoading = false;
+                          _titleController.clear();
+                          _descriptionController.clear();
+                          _isPublic = false;
+                          _isIncognito = false;
+                        });
+                      }
+                    },
+                  ),
+                ),
+
+          // value: _isPublic,
         ],
       ),
     );

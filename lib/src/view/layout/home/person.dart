@@ -7,9 +7,6 @@ class Person extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorS.background,
-
-    );
+    return Column(children: [],);
   }
 }
