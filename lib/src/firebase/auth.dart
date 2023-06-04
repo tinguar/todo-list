@@ -18,72 +18,9 @@ class FirebaseAuthUser {
 
   ProgressDialog? _progressDialog;
 
-  Future<void> saveNoteWithUser(Note note) async {
+  Future<void> saveUserDataToFirestore(User user, String name, String email) async {
     try {
-      final CollectionReference usersCollection =
-          FirebaseFirestore.instance.collection('users');
-
-      final User? currentUser = _firebaseAuth.currentUser;
-
-      if (currentUser != null) {
-        final CollectionReference notesCollection =
-            usersCollection.doc(currentUser.uid).collection('notes');
-
-        await notesCollection.add(note.toMap());
-      }
-    } catch (e) {
-      print('Error al guardar la nota del usuario en Firestore: $e');
-    }
-  }
-
-
-
-
-
-
-
-
-  Future<List<Note>> getNotes() async {
-    try {
-      final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
-
-      final User? currentUser = _firebaseAuth.currentUser;
-
-      if (currentUser != null) {
-        final CollectionReference notesCollection =
-        usersCollection.doc(currentUser.uid).collection('notes');
-
-        final QuerySnapshot querySnapshot = await notesCollection.get();
-        final List<Note> notes = querySnapshot.docs
-            .map((doc) => Note.fromSnapshot(doc))
-            .toList();
-
-        return notes;
-      } else {
-        return []; // No hay usuario autenticado
-      }
-    } catch (e) {
-      print('Error al obtener las notas del usuario: $e');
-      return [];
-    }
-  }
-
-
-
-
-
-
-
-
-
-
-
-  Future<void> saveUserDataToFirestore(
-      User user, String name, String email) async {
-    try {
-      final CollectionReference usersCollection =
-          FirebaseFirestore.instance.collection('users');
+      final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
 
       final Users userData = Users(
         uid: user.uid,
@@ -99,8 +36,7 @@ class FirebaseAuthUser {
 
   Future<void> updateLastLogin(String uid) async {
     try {
-      final CollectionReference usersCollection =
-          FirebaseFirestore.instance.collection('users');
+      final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
       await usersCollection.doc(uid).update({
         'lastLogin': DateTime.now(),
       });
@@ -119,16 +55,14 @@ class FirebaseAuthUser {
         return null; // Usuario canceló el inicio de sesión
       }
 
-      final GoogleSignInAuthentication authentication =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication authentication = await googleUser.authentication;
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: authentication.idToken,
         accessToken: authentication.accessToken,
       );
 
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
+      final UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
 
       final User? user = userCredential.user;
 
@@ -142,8 +76,7 @@ class FirebaseAuthUser {
         String email = user.email ?? '';
 
         await saveUserDataToFirestore(user, name, email);
-        await updateLastLogin(
-            user.uid); // Actualizar el campo lastLogin en Firestore
+        await updateLastLogin(user.uid); // Actualizar el campo lastLogin en Firestore
         print('Datos del usuario guardados en Firestore');
       }
 
@@ -175,4 +108,36 @@ class FirebaseAuthUser {
   }
 
   FirebaseAuthUser._();
+}
+
+class FirebaseFirestoreHelper {
+  static final FirebaseFirestoreHelper _instance = FirebaseFirestoreHelper._();
+  factory FirebaseFirestoreHelper.instance() => _instance;
+
+  final CollectionReference _notesCollection = FirebaseFirestore.instance.collection('notes');
+
+  Future<void> saveNoteWithUser(Note note, String userId) async {
+    try {
+      final DocumentReference noteRef = _notesCollection.doc();
+      note.userId = userId;
+      await noteRef.set(note.toMap());
+    } catch (e) {
+      print('Error al guardar la nota del usuario en Firestore: $e');
+    }
+  }
+
+  Future<List<Note>> getNotes(String userId) async {
+    try {
+      final QuerySnapshot notesSnapshot = await _notesCollection.where('userId', isEqualTo: userId).get();
+
+      final List<Note> notes = notesSnapshot.docs.map((doc) => Note.fromSnapshot(doc)).toList();
+
+      return notes;
+    } catch (e) {
+      print('Error al obtener las notas del usuario: $e');
+      return [];
+    }
+  }
+
+  FirebaseFirestoreHelper._();
 }

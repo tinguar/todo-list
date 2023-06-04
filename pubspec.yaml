@@ -24,6 +24,9 @@ dependencies:
   google_sign_in: ^5.4.4
   syncfusion_flutter_datepicker: ^21.2.6
   flutter_date_pickers: ^0.4.2
+  intl: ^0.18.0
+  expandable: ^5.0.1
+  uuid: ^3.0.7
 
 
 dev_dependencies:

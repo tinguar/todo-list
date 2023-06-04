@@ -57,15 +57,7 @@ class Todo extends StatelessWidget {
                             const SizedBox(
                               width: 10.0,
                             ),
-                            // if (appStateManager.selectedIndex == 0)
-                            //   Text('Global', style: TextS.title),
-                            // if (appStateManager.selectedIndex == 1)
-                            //   Text('Inicio', style: TextS.title),
-                            // if (appStateManager.selectedIndex == 2)
-                            //   Text('Agregar', style: TextS.title),
-                            // if (appStateManager.selectedIndex == 3)
-                            //   Text(getFormattedName(user?.displayName ?? "N/A"),
-                            //       style: TextS.title),
+
                             const SizedBox(
                               width: 5.0,
                             ),

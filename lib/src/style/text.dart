@@ -6,6 +6,7 @@ class TextS {
     fontSize: 20.0,
     color: Colors.white,
   );
+
   static TextStyle titleW =  TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 20.0,
@@ -15,5 +16,18 @@ class TextS {
   static TextStyle titleER = const TextStyle(
     fontSize: 15.0,
     color: Colors.white,
+  );
+
+  static TextStyle titleG =  TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20.0,
+    color: ColorS.button,
+  );
+
+
+  static TextStyle titleGL =  TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 15.0,
+    color: ColorS.buttonW,
   );
 }

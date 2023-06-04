@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:to_do_list/src/model/model.dart';
 import 'package:to_do_list/src/provider/provider.dart';
 import 'package:to_do_list/src/view/layout/auth/auth.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../constant/constant.dart';
 import '../../../firebase/firebase.dart';
@@ -104,16 +105,19 @@ class _AddState extends State<Add> {
                 ),
               ),
               const SizedBox(width: 10.0),
-              Checkout(
-                value: _isPublic,
-                size: sizeW * 0.4,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _isPublic = value ?? false;
-                  });
-                },
-                style: TextS.titleW,
-                text: 'Global',
+              IgnorePointer(
+                ignoring: _isIncognito == true ? true : false,
+                child: Checkout(
+                  value: _isPublic,
+                  size: sizeW * 0.4,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isPublic = value ?? false;
+                    });
+                  },
+                  style: TextS.titleW,
+                  text: 'Global',
+                ),
               ),
             ],
           ),
@@ -146,13 +150,22 @@ class _AddState extends State<Add> {
                           _isLoading = true;
                         });
 
+                        DateTime now = DateTime.now();
+                        String noteId = Uuid().v4(); // Generar ID aleatorio
+
                         Note note = Note(
-                            title: _titleController.text,
-                            description: _descriptionController.text,
-                            isPublic: _isPublic,
-                            isIncognito: _isIncognito);
-                        await FirebaseAuthUser.instance()
-                            .saveNoteWithUser(note);
+                          title: _titleController.text,
+                          description: _descriptionController.text,
+                          isPublic: _isPublic,
+                          isIncognito: _isIncognito,
+                          createdAt: now,
+                          updatedAt: now,
+                          userId: widget.user!.uid,
+                          idN: noteId,
+                        );
+
+                        await FirebaseFirestoreHelper.instance()
+                            .saveNoteWithUser(note, widget.user!.uid);
 
                         setState(() {
                           _isLoading = false;

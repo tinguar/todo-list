@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/src/style/style.dart';
 import 'package:to_do_list/src/view/layout/home/home.dart';
@@ -17,10 +18,10 @@ class Home extends StatelessWidget {
     final sizeW = Responsive.isResponsiveWidth(context, 1);
 
     final List<Widget> pages = [
-      Init(),
+      Global(),
       Init(),
       Add(user: user),
-      Init(),
+      Person(),
     ];
 
     return SafeArea(
@@ -30,17 +31,29 @@ class Home extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween ,
                 children: [
-                  Text(
-                    'Welcome, ${user?.displayName}',
-                    style: const TextStyle(fontSize: 24),
+                  Row(
+                    children: [
+                      Text(
+                        getFormattedName(user?.displayName ?? "N/A"),
+                        style: TextS.title,
+                      ),
+                      const SizedBox( width: 5.0,),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: ColorS.circle,
+                        ),
+                      )
+                    ],
                   ),
-                  const SizedBox(height: 16),
                   CircleAvatar(
                     backgroundImage: NetworkImage(user?.photoURL ?? ''),
-                    radius: 40,
+                    radius: 25,
                   ),
                 ],
               ),
@@ -48,7 +61,6 @@ class Home extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: SizedBox(
-
                   child: IndexedStack(
                     index:
                         Provider.of<NavigationProvider>(context).currentIndex,
@@ -59,32 +71,37 @@ class Home extends StatelessWidget {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          fixedColor: Colors.blue,
-          backgroundColor: Colors.blue,
-          currentIndex: Provider.of<NavigationProvider>(context).currentIndex,
-          onTap: (int index) {
-            Provider.of<NavigationProvider>(context, listen: false)
-                .changePage(index);
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Global',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
-              label: 'Inicio',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Agregar',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Usuario',
-            ),
-          ],
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: ColorS.backgroundB,
+          ),
+          child: BottomNavigationBar(
+            fixedColor: ColorS.select,
+            unselectedItemColor: ColorS.selectN,
+            currentIndex: Provider.of<NavigationProvider>(context).currentIndex,
+            onTap: (int index) {
+              Provider.of<NavigationProvider>(context, listen: false)
+                  .changePage(index);
+            },
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.globe),
+                label: 'Global',
+              ),
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.house),
+                label: 'Inicio',
+              ),
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.circlePlus),
+                label: 'Agregar',
+              ),
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.userPen),
+                label: 'Usuario',
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -7,7 +7,8 @@ class NotesProvider extends ChangeNotifier {
 
   Future<void> fetchNotes() async {
     try {
-      final List<Note> notes = await FirebaseAuthUser.instance().getNotes();
+      final String userId = FirebaseAuthUser.instance().user?.uid ?? '';
+      final List<Note> notes = await FirebaseFirestoreHelper.instance().getNotes(userId);
       userNotes = notes;
       notifyListeners();
     } catch (e) {
