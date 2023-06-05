@@ -19,15 +19,18 @@ class TextS {
   );
 
   static TextStyle titleG =  TextStyle(
-    fontWeight: FontWeight.bold,
     fontSize: 20.0,
-    color: ColorS.button,
+    color: ColorS.buttonW,
   );
 
 
   static TextStyle titleGL =  TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 15.0,
+    fontSize: 20.0,
     color: ColorS.buttonW,
+  );
+
+  static TextStyle titleGLW =  TextStyle(
+    fontSize: 20.0,
+    color: ColorS.button,
   );
 }

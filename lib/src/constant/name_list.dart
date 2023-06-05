@@ -33,3 +33,12 @@ String getInitials(String displayName) {
 
 
 
+String limitText(String text) {
+  if (text.length > 17) {
+    return text.substring(0, 17) + '...';
+  }
+  return text;
+}
+
+
+

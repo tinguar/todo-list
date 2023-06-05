@@ -61,7 +61,7 @@ class SignIn extends StatelessWidget {
                 children: [
                   ButtonIconOnpress(
                     color: ColorS.button,
-                    icon: FaIcon(
+                    icon: const FaIcon(
                       FontAwesomeIcons.google,
                       color: Colors.white,
                     ),
@@ -70,15 +70,18 @@ class SignIn extends StatelessWidget {
                     onTap: () async {
                       final User? user = await firebaseAuthUser.google(context);
                       if (user != null) {
-                        Future.delayed(Duration.zero, () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => Home(
-                                user: user,
+                        Future.delayed(
+                          Duration.zero,
+                          () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => Home(
+                                  user: user,
+                                ),
                               ),
-                            ),
-                          );
-                        });
+                            );
+                          },
+                        );
                       } else {
                         // ignore: use_build_context_synchronously
                         Dialogs.alert(
@@ -91,7 +94,9 @@ class SignIn extends StatelessWidget {
                       if (kDebugMode) {
                         print('google');
                       }
-                      print('INICIAR SECCION');
+                      if (kDebugMode) {
+                        print('INICIAR SECCION');
+                      }
                     },
                   ),
                   const SizedBox(

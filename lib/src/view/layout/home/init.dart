@@ -1,12 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 import '../../../firebase/firebase.dart';
 import '../../../model/model.dart';
 import '../../../style/style.dart';
+import '../../../widget/widget.dart';
 
 class Init extends StatefulWidget {
   @override
@@ -14,7 +17,6 @@ class Init extends StatefulWidget {
 }
 
 class _InitState extends State<Init> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List<Note> userNotes = [];
@@ -39,9 +41,36 @@ class _InitState extends State<Init> {
             itemCount: notes.length,
             itemBuilder: (context, index) {
               Note note = notes[index];
-              return ListTile(
-                title: Text(note.title, style: TextS.titleER),
-                subtitle: Text(note.description),
+              initializeDateFormatting('es');
+              final n = note.createdAt.toString();
+
+              DateTime parsedDate = DateFormat('yyyy-MM-dd').parse(n);
+              DateTime parsedDate2 = DateTime.parse(n);
+              String formattedTime = DateFormat.jm().format(parsedDate2);
+
+              String formattedDay = DateFormat.d().format(parsedDate);
+              String formattedMonth =
+                  DateFormat('MMMM', 'es').format(parsedDate);
+              String formattedYear = DateFormat.y().format(parsedDate);
+
+              return Padding(
+                padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                child: ButtonIconOnpressGlobal(
+                  color: ColorS.buttonW,
+                  text: note.title,
+                  onTap: () {},
+                  textS: TextS.titleGLW,
+                  dataI: formattedDay,
+                  dataM: formattedMonth,
+                  formattedYear: formattedYear,
+                  formattedTime: formattedTime,
+                  colorC: ColorS.buttonW,
+                  colorI: ColorS.button,
+                  icon: FontAwesomeIcons.penToSquare,
+                  textE: note.isPublic,
+                  textI: note.isIncognito,
+                  colorE: ColorS.circle,
+                ),
               );
             },
           );

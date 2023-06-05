@@ -25,82 +25,90 @@ class Home extends StatelessWidget {
     ];
 
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorS.background,
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        getFormattedName(user?.displayName ?? "N/A"),
-                        style: TextS.title,
-                      ),
-                      const SizedBox( width: 5.0,),
-                      Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: ColorS.circle,
+      child: WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Scaffold(
+          backgroundColor: ColorS.background,
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          getFormattedName(user?.displayName ?? "N/A"),
+                          style: TextS.title,
                         ),
-                      )
-                    ],
-                  ),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(user?.photoURL ?? ''),
-                    radius: 25,
-                  ),
-                ],
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ColorS.circle,
+                          ),
+                        )
+                      ],
+                    ),
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(user?.photoURL ?? ''),
+                      radius: 25,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: SizedBox(
-                  child: IndexedStack(
-                    index:
-                        Provider.of<NavigationProvider>(context).currentIndex,
-                    children: pages,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: SizedBox(
+                    child: IndexedStack(
+                      index:
+                          Provider.of<NavigationProvider>(context).currentIndex,
+                      children: pages,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: ColorS.backgroundB,
-          ),
-          child: BottomNavigationBar(
-            fixedColor: ColorS.select,
-            unselectedItemColor: ColorS.selectN,
-            currentIndex: Provider.of<NavigationProvider>(context).currentIndex,
-            onTap: (int index) {
-              Provider.of<NavigationProvider>(context, listen: false)
-                  .changePage(index);
-            },
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.globe),
-                label: 'Global',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.house),
-                label: 'Inicio',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.circlePlus),
-                label: 'Agregar',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.userPen),
-                label: 'Usuario',
-              ),
             ],
+          ),
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(
+              canvasColor: ColorS.backgroundB,
+            ),
+            child: BottomNavigationBar(
+              fixedColor: ColorS.select,
+              unselectedItemColor: ColorS.selectN,
+              currentIndex:
+                  Provider.of<NavigationProvider>(context).currentIndex,
+              onTap: (int index) {
+                Provider.of<NavigationProvider>(context, listen: false)
+                    .changePage(index);
+              },
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.globe),
+                  label: 'Global',
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.house),
+                  label: 'Inicio',
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.circlePlus),
+                  label: 'Agregar',
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.userPen),
+                  label: 'Usuario',
+                ),
+              ],
+            ),
           ),
         ),
       ),

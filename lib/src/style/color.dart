@@ -13,5 +13,6 @@ class ColorS {
   static Color select = const Color(0xFF02a4eb);
   static Color selectN = const Color(0xFF7d899f);
 
+  static Color textEs = const Color(0xFFf37779);
 
 }
