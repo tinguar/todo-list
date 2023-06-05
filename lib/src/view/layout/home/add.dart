@@ -2,11 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:to_do_list/src/model/model.dart';
-import 'package:to_do_list/src/provider/provider.dart';
-import 'package:to_do_list/src/view/layout/auth/auth.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../constant/constant.dart';
 import '../../../firebase/firebase.dart';
@@ -32,7 +28,6 @@ class _AddState extends State<Add> {
   @override
   Widget build(BuildContext context) {
     final sizeW = Responsive.isResponsiveWidth(context, 1);
-    final sizeH = Responsive.isResponsiveHeight(context, 1);
 
     String buttonTitle = '';
 
@@ -151,7 +146,6 @@ class _AddState extends State<Add> {
                         });
 
                         DateTime now = DateTime.now();
-                        String noteId = Uuid().v4(); // Generar ID aleatorio
 
                         Note note = Note(
                           title: _titleController.text,
@@ -161,7 +155,8 @@ class _AddState extends State<Add> {
                           createdAt: now,
                           updatedAt: now,
                           userId: widget.user!.uid,
-                          idN: noteId,
+                          nameN: widget.user!.displayName ?? '',
+                          photoN: widget.user!.photoURL ?? '',
                         );
 
                         await FirebaseFirestoreHelper.instance()

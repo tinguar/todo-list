@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -10,6 +11,7 @@ import '../../../firebase/firebase.dart';
 import '../../../model/model.dart';
 import '../../../style/style.dart';
 import '../../../widget/widget.dart';
+import '../note/note.dart';
 
 class Init extends StatefulWidget {
   @override
@@ -23,7 +25,7 @@ class _InitState extends State<Init> {
 
   @override
   Widget build(BuildContext context) {
-    final yourProvider = Provider.of<FirebaseAuthUser>(context);
+    final yourProvider = Provider.of<FirebaseAuthHelper>(context);
 
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
@@ -32,8 +34,10 @@ class _InitState extends State<Init> {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final List<Note> notes = snapshot.data!.docs.map((doc) {
-            return Note.fromMap(doc.data() as Map<String, dynamic>);
+          final List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+          final List<Note> notes = documents.map((doc) {
+            final noteData = doc.data() as Map<String, dynamic>;
+            return Note.fromMap(noteData);
           }).toList();
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
@@ -41,6 +45,9 @@ class _InitState extends State<Init> {
             itemCount: notes.length,
             itemBuilder: (context, index) {
               Note note = notes[index];
+              String noteId =
+                  documents[index].id; // Obtener el ID del documento
+
               initializeDateFormatting('es');
               final n = note.createdAt.toString();
 
@@ -58,7 +65,42 @@ class _InitState extends State<Init> {
                 child: ButtonIconOnpressGlobal(
                   color: ColorS.buttonW,
                   text: note.title,
-                  onTap: () {},
+                  onTap: () {
+                    DialogsB.alert(
+                      context,
+                      title: 'Menú de opciones.',
+                      description: '¿Cuál vas a elegir?',
+                      ok: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ViewNote(note: note),
+                          ),
+                        ).then((value) {
+                          Navigator.pop(context); // Cerrar el Dialog al volver
+                        });
+                      },
+                      edit: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => Crud(note: note, noteId: noteId),
+                          ),
+                        ).then((value) {
+                          Navigator.pop(context); // Cerrar el Dialog al volver
+                        });
+                      },
+                      destroye: () async {
+                        FirebaseFirestoreHelper firestoreHelper =
+                            FirebaseFirestoreHelper.instance();
+                        firestoreHelper.deleteNote(noteId);
+                        if (kDebugMode) {
+                          print(noteId);
+                        }
+                        Navigator.pop(context); // Cerrar el Dialog
+                      },
+                    );
+                  },
                   textS: TextS.titleGLW,
                   dataI: formattedDay,
                   dataM: formattedMonth,

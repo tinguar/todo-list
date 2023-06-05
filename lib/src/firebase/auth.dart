@@ -7,9 +7,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../model/model.dart';
 import '../widget/widget.dart';
 
-class FirebaseAuthUser {
-  static final FirebaseAuthUser _instance = FirebaseAuthUser._();
-  factory FirebaseAuthUser.instance() => _instance;
+class FirebaseAuthHelper {
+  static final FirebaseAuthHelper _instance = FirebaseAuthHelper._();
+  factory FirebaseAuthHelper.instance() => _instance;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -18,9 +18,11 @@ class FirebaseAuthUser {
 
   ProgressDialog? _progressDialog;
 
-  Future<void> saveUserDataToFirestore(User user, String name, String email) async {
+  Future<void> saveUserDataToFirestore(
+      User user, String name, String email) async {
     try {
-      final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+      final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
       final Users userData = Users(
         uid: user.uid,
@@ -36,7 +38,8 @@ class FirebaseAuthUser {
 
   Future<void> updateLastLogin(String uid) async {
     try {
-      final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+      final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
       await usersCollection.doc(uid).update({
         'lastLogin': DateTime.now(),
       });
@@ -55,14 +58,16 @@ class FirebaseAuthUser {
         return null; // Usuario canceló el inicio de sesión
       }
 
-      final GoogleSignInAuthentication authentication = await googleUser.authentication;
+      final GoogleSignInAuthentication authentication =
+      await googleUser.authentication;
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: authentication.idToken,
         accessToken: authentication.accessToken,
       );
 
-      final UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final UserCredential userCredential =
+      await _firebaseAuth.signInWithCredential(credential);
 
       final User? user = userCredential.user;
 
@@ -76,7 +81,8 @@ class FirebaseAuthUser {
         String email = user.email ?? '';
 
         await saveUserDataToFirestore(user, name, email);
-        await updateLastLogin(user.uid); // Actualizar el campo lastLogin en Firestore
+        await updateLastLogin(
+            user.uid); // Actualizar el campo lastLogin en Firestore
         print('Datos del usuario guardados en Firestore');
       }
 
@@ -107,35 +113,59 @@ class FirebaseAuthUser {
     _progressDialog = null;
   }
 
-  FirebaseAuthUser._();
+  FirebaseAuthHelper._();
 }
 
 class FirebaseFirestoreHelper {
   static final FirebaseFirestoreHelper _instance = FirebaseFirestoreHelper._();
   factory FirebaseFirestoreHelper.instance() => _instance;
 
-  final CollectionReference _notesCollection = FirebaseFirestore.instance.collection('notes');
+  final CollectionReference _notesCollection =
+  FirebaseFirestore.instance.collection('notes');
 
-  Future<void> saveNoteWithUser(Note note, String userId) async {
+  Future<String> saveNoteWithUser(Note note, String userId) async {
     try {
       final DocumentReference noteRef = _notesCollection.doc();
       note.userId = userId;
       await noteRef.set(note.toMap());
+      print('Nota guardada con éxito');
+      return noteRef.id; // Devuelve el ID de la nota guardada
     } catch (e) {
       print('Error al guardar la nota del usuario en Firestore: $e');
+      return ''; // Devuelve una cadena vacía en caso de error
     }
   }
 
-  Future<List<Note>> getNotes(String userId) async {
+  Future<List<Note>> getAllNotes() async {
     try {
-      final QuerySnapshot notesSnapshot = await _notesCollection.where('userId', isEqualTo: userId).get();
-
-      final List<Note> notes = notesSnapshot.docs.map((doc) => Note.fromSnapshot(doc)).toList();
-
+      final querySnapshot = await _notesCollection.get();
+      final notes = querySnapshot.docs
+          .map((doc) => Note.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
       return notes;
     } catch (e) {
-      print('Error al obtener las notas del usuario: $e');
+      print('Error al obtener todas las notas: $e');
       return [];
+    }
+  }
+
+  Future<void> updateNote(
+      String noteId, Map<String, dynamic> updatedData) async {
+    try {
+      final noteRef = _notesCollection.doc(noteId);
+      await noteRef.update(updatedData);
+      print('Nota actualizada con éxito');
+    } catch (e) {
+      print('Error al actualizar la nota: $e');
+    }
+  }
+
+  Future<void> deleteNote(String noteId) async {
+    try {
+      await _notesCollection.doc(noteId).delete();
+      print('Nota eliminada con éxito');
+    } catch (e) {
+      print('Error al eliminar la nota: $e');
     }
   }
 

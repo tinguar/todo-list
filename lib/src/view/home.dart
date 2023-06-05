@@ -21,7 +21,7 @@ class Home extends StatelessWidget {
       Global(),
       Init(),
       Add(user: user),
-      Person(),
+      Person(user: user),
     ];
 
     return SafeArea(

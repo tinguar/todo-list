@@ -13,6 +13,12 @@ class TextS {
     color: ColorS.button,
   );
 
+  static TextStyle titleWV =  TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20.0,
+    color: ColorS.buttonW,
+  );
+
   static TextStyle titleER = const TextStyle(
     fontSize: 15.0,
     color: Colors.white,

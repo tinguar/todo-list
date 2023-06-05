@@ -19,7 +19,7 @@ class SignIn extends StatelessWidget {
     final sizeW = Responsive.isResponsiveWidth(context, 1);
     final sizeH = Responsive.isResponsiveHeight(context, 1);
 
-    final firebaseAuthUser = Provider.of<FirebaseAuthUser>(context);
+    final firebaseAuthUser = Provider.of<FirebaseAuthHelper>(context);
 
     return Scaffold(
       body: Responsive(

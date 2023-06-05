@@ -28,14 +28,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<NavigationProvider>(
           create: (context) => NavigationProvider(),
         ),
-        ChangeNotifierProvider(
-        create: (_) => NotesProvider(),),
+
         Provider<FirebaseAuth>(
           create: (_) => FirebaseAuth.instance,
         ),
-        Provider<FirebaseAuthUser>(
-          create: (_) => FirebaseAuthUser.instance(),
+        Provider<FirebaseAuthHelper>(
+          create: (_) => FirebaseAuthHelper.instance(),
         ),
+        Provider<FirebaseFirestoreHelper>(
+          create: (_) => FirebaseFirestoreHelper.instance(),
+        ),
+
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

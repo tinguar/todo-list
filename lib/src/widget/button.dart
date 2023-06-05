@@ -8,14 +8,14 @@ class ButtonIconOnpress extends StatelessWidget {
   final FaIcon icon;
   final String text;
   final TextStyle textS;
-  final Function() onTap;
+  final Function()? onTap;
 
   const ButtonIconOnpress({
     Key? key,
     required this.color,
     required this.icon,
     required this.text,
-    required this.onTap,
+     this.onTap,
     required this.textS,
   }) : super(key: key);
 

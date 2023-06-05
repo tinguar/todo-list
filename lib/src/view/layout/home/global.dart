@@ -1,15 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
+import '../../../firebase/auth.dart';
 import '../../../model/model.dart';
 import '../../../style/style.dart';
 import '../../../widget/widget.dart';
+import '../note/note.dart';
 
 class Global extends StatefulWidget {
+  const Global({
+    Key? key,
+  }) : super(key: key);
+
   @override
   _GlobalState createState() => _GlobalState();
 }
@@ -52,7 +60,16 @@ class _GlobalState extends State<Global> {
               return ButtonIconOnpressGlobal(
                 color: ColorS.button,
                 text: note.title,
-                onTap: () {},
+                onTap: ()  {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ViewNote(
+                        note: note,
+                      ),
+                    ),
+                  );
+                },
                 textS: TextS.titleG,
                 dataI: formattedDay,
                 dataM: formattedMonth,
