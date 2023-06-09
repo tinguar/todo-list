@@ -32,7 +32,9 @@ class FirebaseAuthHelper {
       );
       await usersCollection.doc(user.uid).set(userData.toMap());
     } catch (e) {
-      print('Error al guardar los datos del usuario en Firestore: $e');
+      if (kDebugMode) {
+        print('Error al guardar los datos del usuario en Firestore: $e');
+      }
     }
   }
 
@@ -83,7 +85,9 @@ class FirebaseAuthHelper {
         await saveUserDataToFirestore(user, name, email);
         await updateLastLogin(
             user.uid); // Actualizar el campo lastLogin en Firestore
-        print('Datos del usuario guardados en Firestore');
+        if (kDebugMode) {
+          print('Datos del usuario guardados en Firestore');
+        }
       }
 
       _dismissProgressDialog();
@@ -122,16 +126,22 @@ class FirebaseFirestoreHelper {
 
   final CollectionReference _notesCollection =
   FirebaseFirestore.instance.collection('notes');
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<String> saveNoteWithUser(Note note, String userId) async {
     try {
       final DocumentReference noteRef = _notesCollection.doc();
       note.userId = userId;
+      note.id = noteRef.id; // Asignar el ID generado a la propiedad "id" de la clase "Note"
       await noteRef.set(note.toMap());
-      print('Nota guardada con éxito');
+      if (kDebugMode) {
+        print('Nota guardada con éxito');
+      }
       return noteRef.id; // Devuelve el ID de la nota guardada
     } catch (e) {
-      print('Error al guardar la nota del usuario en Firestore: $e');
+      if (kDebugMode) {
+        print('Error al guardar la nota del usuario en Firestore: $e');
+      }
       return ''; // Devuelve una cadena vacía en caso de error
     }
   }
@@ -168,6 +178,7 @@ class FirebaseFirestoreHelper {
       print('Error al eliminar la nota: $e');
     }
   }
+
 
   FirebaseFirestoreHelper._();
 }

@@ -1,22 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:to_do_list/src/style/style.dart';
-import 'package:to_do_list/src/view/layout/home/home.dart';
 import 'package:intl/intl.dart';
-
 import '../../../constant/constant.dart';
 import '../../../model/model.dart';
 
 class ViewNote extends StatefulWidget {
   final Note note;
-  const ViewNote({Key? key, required this.note}) : super(key: key);
+  final User? user;
+
+  const ViewNote({Key? key, required this.note, this.user}) : super(key: key);
 
   @override
   State<ViewNote> createState() => _ViewNoteState();
 }
 
 class _ViewNoteState extends State<ViewNote> {
+  bool isLiked = false;
+
   @override
   Widget build(BuildContext context) {
     final sizeW = Responsive.isResponsiveWidth(context, 1);
@@ -59,13 +61,22 @@ class _ViewNoteState extends State<ViewNote> {
                 ],
               ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(widget.note.photoN),
-              radius: 25,
-            ),
-          )
+          widget.note.isIncognito
+              ? const Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://images.unsplash.com/photo-1466921583968-f07aa80c526e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80'),
+                    radius: 25,
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(widget.note.photoN),
+                    radius: 25,
+                  ),
+                )
         ],
       ),
       body: Padding(
@@ -122,14 +133,19 @@ class _ViewNoteState extends State<ViewNote> {
                 '$formattedMonth $formattedDay, $formattedYear $formattedTime',
                 style: TextS.titleG,
               ),
-              const FaIcon(
-                FontAwesomeIcons.heart,
-                color: Colors.white,
-              ),
-              const FaIcon(
-                FontAwesomeIcons.comment,
-                color: Colors.white,
-              )
+              // GestureDetector(
+              //   onTap: () {
+              //
+              //   },
+              //   child: FaIcon(
+              //     isLiked ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart,
+              //     color: Colors.white,
+              //   ),
+              // ),
+              // const FaIcon(
+              //   FontAwesomeIcons.comment,
+              //   color: Colors.white,
+              // )
             ],
           ),
         ),

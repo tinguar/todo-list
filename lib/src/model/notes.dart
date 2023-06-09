@@ -1,33 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Note {
+  String? id;
   final String title;
   final String description;
   final bool isPublic;
   final bool isIncognito;
   final DateTime createdAt;
-  final DateTime? updatedAt; // updatedAt es opcional
+  final DateTime? updatedAt;
   final String nameN;
   final String photoN;
-
+  List<dynamic> likes;
   String userId;
-  bool isExpanded; // Nuevo campo isExpanded
+  bool isExpanded;
 
   Note({
+     this.id,
     required this.userId,
     required this.title,
     required this.description,
     required this.isPublic,
     required this.isIncognito,
     required this.createdAt,
-    this.updatedAt, // updatedAt es opcional
-    required this.nameN, // updatedAt es opcional
-    required this.photoN, // updatedAt es opcional
-    this.isExpanded = false, // Valor predeterminado para isExpanded
+    this.updatedAt,
+    required this.nameN,
+    required this.photoN,
+    this.likes = const [],
+    this.isExpanded = false,
   });
 
   factory Note.fromMap(Map<String, dynamic> map) {
     return Note(
+      id: map['id'] ?? '',
       userId: map['userId'] ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '',
@@ -39,26 +43,32 @@ class Note {
           : null,
       nameN: map['nameN'] ?? '',
       photoN: map['photoN'] ?? '',
+      likes: map['likes'] ?? 0,
+      isExpanded: map['isExpanded'] ?? false,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'title': title,
       'description': description,
       'isPublic': isPublic,
       'isIncognito': isIncognito,
       'createdAt': createdAt,
-      'updatedAt': updatedAt, // updatedAt es opcional
-      'nameN': nameN, // updatedAt es opcional
-      'photoN': photoN, // updatedAt es opcional
+      'updatedAt': updatedAt,
+      'nameN': nameN,
+      'photoN': photoN,
+      'likes': likes,
+      'isExpanded': isExpanded,
     };
   }
 
   static List<Note> fromMapList(List<dynamic> mapList) {
     return mapList.map((map) {
       return Note(
+        id: map['id'] ?? '',
         userId: map['userId'] ?? '',
         title: map['title'] ?? '',
         description: map['description'] ?? '',
@@ -70,6 +80,8 @@ class Note {
             : null,
         nameN: map['nameN'] ?? '',
         photoN: map['photoN'] ?? '',
+        likes: map['likes'] ?? 0,
+        isExpanded: map['isExpanded'] ?? false,
       );
     }).toList();
   }
@@ -78,6 +90,7 @@ class Note {
     Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
 
     return Note(
+      id: data?['id'] ?? '',
       userId: data?['userId'] ?? '',
       title: data?['title'] ?? '',
       description: data?['description'] ?? '',
@@ -89,6 +102,8 @@ class Note {
           : null,
       nameN: data?['nameN'] ?? '',
       photoN: data?['photoN'] ?? '',
+      likes: data?['likes'] ?? 0,
+      isExpanded: data?['isExpanded'] ?? false,
     );
   }
 }

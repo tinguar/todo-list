@@ -19,7 +19,7 @@ class Home extends StatelessWidget {
 
     final List<Widget> pages = [
       Global(),
-      Init(),
+      Init(user: user),
       Add(user: user),
       Person(user: user),
     ];

@@ -24,18 +24,19 @@ class DialogsB {
           mainAxisSize: MainAxisSize.min,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(10.0)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(10.0)),
               child: Align(
                 alignment: Alignment.topCenter,
-                heightFactor: 0.8,
                 child: Container(
                   color: ColorS.background,
                   child: Center(
                     child: Text(
                       'acción'.toUpperCase(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 75.0,
+                        fontSize:
+                            MediaQuery.of(context).size.width * 75.0 / 414,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -112,6 +113,4 @@ class ProgressDialogB {
       ),
     );
   }
-
-
 }

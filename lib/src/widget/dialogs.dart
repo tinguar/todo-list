@@ -24,12 +24,12 @@ class Dialogs {
                 heightFactor: 0.8,
                 child: Container(
                   color: ColorS.background,
-                  child: const Center(
+                  child:  Center(
                     child: Text(
                       'ERROR',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 75.0,
+                        fontSize:  MediaQuery.of(context).size.width * 75.0 /  414,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

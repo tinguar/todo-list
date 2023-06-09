@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +15,10 @@ import '../../../widget/widget.dart';
 import '../note/note.dart';
 
 class Init extends StatefulWidget {
+  final User? user;
+
+  const Init({Key? key, this.user}) : super(key: key);
+
   @override
   _InitState createState() => _InitState();
 }
@@ -74,7 +79,7 @@ class _InitState extends State<Init> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ViewNote(note: note),
+                            builder: (_) => ViewNote(note: note, user: widget.user),
                           ),
                         ).then((value) {
                           Navigator.pop(context); // Cerrar el Dialog al volver
